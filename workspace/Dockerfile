@@ -243,6 +243,9 @@ ARG INSTALL_WORKSPACE_SSH=false
 COPY insecure_id_rsa /tmp/id_rsa
 COPY insecure_id_rsa.pub /tmp/id_rsa.pub
 
+COPY '~/.ssh/docker_id_rsa' /tmp/docker_id_rsa
+COPY '~/.ssh/id_rsa_docker.pub' /tmp/id_rsa_docker.pub
+
 RUN if [ ${INSTALL_WORKSPACE_SSH} = true ]; then \
     rm -f /etc/service/sshd/down && \
     cat /tmp/id_rsa.pub >> /root/.ssh/authorized_keys \
@@ -251,6 +254,18 @@ RUN if [ ${INSTALL_WORKSPACE_SSH} = true ]; then \
         && rm -f /tmp/id_rsa* \
         && chmod 644 /root/.ssh/authorized_keys /root/.ssh/id_rsa.pub \
     && chmod 400 /root/.ssh/id_rsa \
+    && cp -rf /root/.ssh /home/laradock \
+    && chown -R laradock:laradock /home/laradock/.ssh \
+;fi
+
+RUN if [ ${INSTALL_WORKSPACE_SSH} = true ]; then \
+    rm -f /etc/service/sshd/down && \
+    cat /tmp/id_rsa_docker.pub >> /root/.ssh/authorized_keys \
+        && cat /tmp/docker_id_rsa.pub >> /root/.ssh/id_rsa_docker.pub \
+        && cat /tmp/id_rsa_docker >> /root/.ssh/id_rsa_docker \
+        && rm -f /tmp/id_rsa* \
+        && chmod 644 /root/.ssh/authorized_keys /root/.ssh/id_rsa_docker.pub \
+    && chmod 400 /root/.ssh/id_rsa_docker \
     && cp -rf /root/.ssh /home/laradock \
     && chown -R laradock:laradock /home/laradock/.ssh \
 ;fi
