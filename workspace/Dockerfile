@@ -48,7 +48,6 @@ RUN apt-get update -yqq && \
 # to add more Software's or remove existing one, you need to edit the
 # base image (https://github.com/Laradock/workspace).
 #
-
 #
 #--------------------------------------------------------------------------
 # Optional Software's Installation
@@ -251,21 +250,6 @@ RUN if [ ${INSTALL_WORKSPACE_SSH} = true ]; then \
         && rm -f /tmp/id_rsa* \
         && chmod 644 /root/.ssh/authorized_keys /root/.ssh/id_rsa.pub \
     && chmod 400 /root/.ssh/id_rsa \
-    && cp -rf /root/.ssh /home/laradock \
-    && chown -R laradock:laradock /home/laradock/.ssh \
-;fi
-
-COPY insecure_id_rsa_docker /tmp/id_rsa_docker
-COPY insecure_id_rsa_docker.pub /tmp/id_rsa_docker.pub
-
-RUN if [ ${INSTALL_WORKSPACE_SSH} = true ]; then \
-    rm -f /etc/service/sshd/down && \
-    cat /tmp/id_rsa_docker.pub >> /root/.ssh/authorized_keys \
-        && cat /tmp/id_rsa_docker.pub >> /root/.ssh/id_rsa_docker.pub \
-        && cat /tmp/id_rsa_docker >> /root/.ssh/id_rsa_docker \
-        && rm -f /tmp/id_rsa* \
-        && chmod 644 /root/.ssh/authorized_keys /root/.ssh/id_rsa_docker.pub \
-    && chmod 400 /root/.ssh/id_rsa_docker \
     && cp -rf /root/.ssh /home/laradock \
     && chown -R laradock:laradock /home/laradock/.ssh \
 ;fi
