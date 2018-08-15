@@ -375,7 +375,7 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         if [ ${NPM_REGISTRY} ]; then \
         npm config set registry ${NPM_REGISTRY} \
         ;fi && \
-        npm install -g gulp bower vue-cli \
+        npm install -g gulp vue-cli \
 ;fi
 
 # Wouldn't execute when added to the RUN statement in the above block
@@ -680,6 +680,7 @@ USER root
 ARG INSTALL_IMAGEMAGICK=false
 
 RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
+    apt-get update -yqq && \
     apt-get install -y --force-yes imagemagick php-imagick \
 ;fi
 
