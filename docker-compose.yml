@@ -185,8 +185,12 @@ services:
       depends_on:
         - php-fpm
       networks:
-        - frontend
-        - backend
+        frontend:
+            aliases:
+              - api.test
+        backend:
+            aliases:
+              - api.test
 
 ### Blackfire ########################################
     blackfire:
